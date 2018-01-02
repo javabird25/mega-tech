@@ -1,2 +1,2 @@
-# mega-tech
+# Megatech
 Industry addon for Garry's Mod
