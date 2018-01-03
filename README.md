@@ -1,2 +1,2 @@
 # Megatech
-Industry addon for Garry's Mod
+Industry, tech and science addon for Garry's Mod.
