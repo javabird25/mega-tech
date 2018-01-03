@@ -1,11 +1,9 @@
 AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
-DEFINE_BASECLASS('mt_machine_base')
 
 ENT.health = 200
 
 function ENT:Initialize()
-    BaseClass.Initialize()
-    self:SetModel('')   -- TODO
+    self:machineInitialize('models/props_wasteland/laundry_washer001a.mdl')
 end
