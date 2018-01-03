@@ -1,3 +1,4 @@
 net.Receive('drawSetupFrame', function()
-    self:drawSetupFrame(LocalPlayer())
+    local machine = net.ReadEntity()
+    machine:drawSetupFrame(LocalPlayer())
 end)
