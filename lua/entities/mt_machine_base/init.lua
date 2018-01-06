@@ -5,6 +5,19 @@ include('shared.lua')
 
 util.AddNetworkString('drawSetupFrame')
 
+function ENT:explodeAndRemove()
+    local explosionRadius = self:MaxHealth() / 50
+
+    local explosionEffect = EffectData()
+    explosionEffect:SetOrigin(self:GetPos())
+    explosionEffect:SetRadius(explosionRadius)
+
+    util.Effect('Explosion', explosionEffect, false)
+    -- This crap crashes the game:
+    -- util.BlastDamage(self, nil, self:GetPos(), explosionRadius, self.health / 10)
+    self:Remove()
+end
+
 function ENT:setupHealth()
     self:SetMaxHealth(self.health)
     self:SetHealth(self.health)
@@ -12,15 +25,12 @@ end
 
 function ENT:machineInitialize(model)
     self:SetModel(model)
-
     self:SetMoveType(MOVETYPE_VPHYSICS)
     if SERVER then
         self:PhysicsInit(SOLID_VPHYSICS)
     end
     self:PhysWake()
-
     self:setupHealth()
-
     self:SetUseType(SIMPLE_USE)
 end
 
@@ -38,18 +48,9 @@ function ENT:SetupDataTables()
 end
 
 function ENT:OnTakeDamage(damageInfo)
-    self:SetHealth(self:Health() - damageInfo:GetDamage())
+    self:TakeDamageInfo(damageInfo)
 
-    if self:Health() > 0 then return end
-
-    local explosionRadius = self.health / 50
-
-    local explosionEffect = EffectData()
-    explosionEffect:SetOrigin(self:GetPos())
-    explosionEffect:SetRadius(explosionRadius)
-
-    util.Effect('Explosion', explosionEffect, false)
-    -- This crap crashes the game:
-    -- util.BlastDamage(self, nil, self:GetPos(), explosionRadius, self.health / 10)
-    self:Remove()
+    if self:Health() < 0 then
+        self:explodeAndRemove()
+    end
 end
